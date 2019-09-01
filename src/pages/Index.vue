@@ -4,10 +4,6 @@
       <h3 class="text-info text-center">
         Join the community
       </h3>
-      <!-- <q-button @click="auth('twitter')">Twitter</q-button>
-    <q-button @click="auth('twitter')">LinkedIn</q-button>
-    <q-button @click="auth('twitter')">Facebook</q-button>
-    <q-button @click="auth('twitter')">Github</q-button> -->
       <div class="column q-pa-md q-gutter-y-md">
         <q-btn
           unelevated
@@ -17,6 +13,7 @@
           label="Join with"
           size="md"
           class="text-info"
+          @click="auth('twitter')"
         />
         <q-btn
           unelevated
@@ -41,46 +38,9 @@
           icon-right="fab fa-github"
           label="Join with"
           class="text-info"
+          @click="auth('github')"
         />
       </div>
-
-      <!-- <q-list dark>
-        <q-item
-          clickable
-          @click="auth('twitter')"
-        >
-          <q-item-section avatar>
-            <q-icon name="fab fa-twitter" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>{{ $t('Join with Twitter') }}</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-section avatar>
-            <q-icon name="fab fa-facebook" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>{{ $t('Join with Facebook') }}</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-section avatar>
-            <q-icon name="fab fa-linkedin" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>{{ $t('Join with LinkedIn') }}</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-section avatar>
-            <q-icon name="fab fa-github" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>{{ $t('Join with Github') }}</q-item-label>
-          </q-item-section>
-        </q-item>
-      </q-list> -->
     </div>
   </q-page>
 </template>
@@ -90,12 +50,13 @@
 
 <script>
 export default {
-  name: 'PageIndex',
+  name: 'Join',
 
   methods: {
     auth(network) {
       this.$hello.init({
         twitter: 'AeWaRlsX9Y0sGN6hzOPbnvD7i',
+        github: '10dd01c1a10f078a45fa',
       });
       this.$hello(network).login({ display: 'popup' }).then(() => {
         const authRes = this.$hello(network).getAuthResponse();
@@ -110,6 +71,9 @@ export default {
             performs operations using the user info from profile
           */
         });
+      },
+      (e) => {
+        console.error(e);
       });
     },
   },
