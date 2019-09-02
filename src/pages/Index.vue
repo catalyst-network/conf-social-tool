@@ -67,6 +67,7 @@ export default {
         this.$hello(network).api('me').then((json) => {
           const profile = json;
           console.log(profile);
+          this.$router.push(`/${network}`);
           /*
             performs operations using the user info from profile
           */
