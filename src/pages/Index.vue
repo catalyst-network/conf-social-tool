@@ -7,7 +7,6 @@
       <div class="column q-pa-md q-gutter-y-md">
         <q-btn
           unelevated
-          rounded
           style="background: #1da1f2; margin: 0.75rem auto; width: 70%;"
           icon-right="fab fa-twitter"
           label="Join with"
@@ -17,7 +16,6 @@
         />
         <q-btn
           unelevated
-          rounded
           style="background: #1877f2; margin: 0.75rem auto; width: 70%;"
           icon-right="fab fa-facebook"
           label="Join with"
@@ -25,7 +23,6 @@
         />
         <q-btn
           unelevated
-          rounded
           style="background: #007bb5; margin: 0.75rem auto; width: 70%;"
           icon-right="fab fa-linkedin"
           label="Join with"
@@ -33,7 +30,6 @@
         />
         <q-btn
           unelevated
-          rounded
           style="background: #211f1f; margin: 0.75rem auto; width: 70%;"
           icon-right="fab fa-github"
           label="Join with"
@@ -49,6 +45,8 @@
 </style>
 
 <script>
+import Profile from '../store/Profile';
+
 export default {
   name: 'Join',
 
@@ -57,6 +55,8 @@ export default {
       this.$hello.init({
         twitter: 'AeWaRlsX9Y0sGN6hzOPbnvD7i',
         github: '10dd01c1a10f078a45fa',
+      }, {
+        oauth_proxy: 'http://localhost:5500/proxy',
       });
       this.$hello(network).login({ display: 'popup' }).then(() => {
         const authRes = this.$hello(network).getAuthResponse();
@@ -67,7 +67,20 @@ export default {
         this.$hello(network).api('me').then((json) => {
           const profile = json;
           console.log(profile);
-          this.$router.push(`/${network}`);
+          const userExists = Profile.find(network);
+          if (!userExists) {
+            Profile.insert({
+              data: {
+                name: profile.name,
+                username: profile.screen_name,
+                accessToken: authRes.oauth_token,
+                platform: network,
+              },
+            });
+          }
+
+
+          // this.$router.push(`/${network}`);
           /*
             performs operations using the user info from profile
           */

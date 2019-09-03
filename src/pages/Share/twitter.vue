@@ -103,6 +103,13 @@
       transition-hide="slide-down"
     >
       <q-card class="bg-info text-black text-center">
+        <div class="row justify-end">
+          <q-icon
+            v-close-popup
+            name="close"
+            size="md"
+          />
+        </div>
         <q-card-section>
           <h5>
             To claim your free T-shirt show this QR code at the Catalyst Booth
@@ -122,6 +129,8 @@
 <script>
 import { twitter } from 'vue-twitter';
 import * as QRCode from 'qrcode';
+import Profile from '../../store/Profile';
+
 
 export default {
   name: 'Twitter',
@@ -138,34 +147,37 @@ export default {
     };
   },
 
+  computed: {
+    user() {
+      return Profile.find('twitter');
+    },
+  },
+
 
   async mounted() {
+    this.$q.loading.show({
+      backgroundColor: 'primary',
+      messageColor: 'secondary',
+      customClass: 'loading',
+    });
     if (this.signedIn()) {
       console.log('Followed: ', await this.hasFollowed());
       console.log('Tweeted: ', await this.hasTweeted());
-      await QRCode.toDataURL('text', (err, url) => {
-        if (err) {
-          console.error(err);
-        } else {
-          console.log('URL: ', url);
-          console.log(typeof url === 'string');
-          this.qrCodeDataURL = url;
-        }
-      });
     } else {
       this.$router.push('/');
     }
+    this.$q.loading.hide();
   },
 
   methods: {
     async qrCode(user) {
-      // const options = {
-      //   width: 300,
-      //   height: 300,
-      // };
+      const options = {
+        width: 300,
+        height: 300,
+      };
       if (typeof user === 'string') {
         console.log(user);
-        await QRCode.toDataURL('text', (err, url) => {
+        await QRCode.toDataURL(user, options, (err, url) => {
           if (err) {
             console.error(err);
           } else {
@@ -214,14 +226,14 @@ export default {
     },
     async claimReward() {
       if (this.followed && this.tweeted) {
-        // const qrCodeData = {
-        //   platform: 'twitter',
-        //   username: '__stxphxn__',
-        //   name: 'Stephen',
-        //   email: 'test@test.com',
-        //   access_token: '1154427289414897666-l9Hfsmwn2WYM581sImCrH5byPX3uaV',
-        // };
-        // const text = JSON.stringify(qrCodeData);
+        const qrCodeData = {
+          platform: 'twitter',
+          username: this.user.username,
+          name: this.user.name,
+          access_token: this.user.accessToken,
+        };
+        const text = JSON.stringify(qrCodeData);
+        await this.qrCode(text);
         console.log(this.qrCodeDataURL);
         this.rewardDialog = true;
       }
@@ -234,4 +246,8 @@ export default {
   line-height: 1rem;
   margin-block-end: 1rem;
 }
+.loading:before {
+    opacity: 1;
+}
+
 </style>
