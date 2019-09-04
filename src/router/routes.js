@@ -14,6 +14,13 @@ const routes = [
       { path: '', component: () => import('pages/Share/twitter.vue') },
     ],
   },
+  {
+    path: '/telegram',
+    component: () => import('layouts/MyLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/Share/telegram.vue') },
+    ],
+  },
 ];
 
 // Always leave this as last one

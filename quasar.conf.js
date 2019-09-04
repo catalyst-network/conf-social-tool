@@ -54,6 +54,7 @@ module.exports = function (ctx) {
         'QCardSection',
         'QSeparator',
         'QDialog',
+        'QAvatar',
       ],
 
       directives: [

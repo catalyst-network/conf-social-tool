@@ -18,6 +18,7 @@
     "qrcode": "^1.4.1",
     "quasar": "^1.0.0",
     "vue-i18n": "^8.0.0",
+    "vue-telegram-login": "^2.1.0",
     "vue-twitter": "^0.1.0",
     "vuex-persist": "^2.1.0"
   },

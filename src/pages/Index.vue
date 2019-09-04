@@ -14,13 +14,13 @@
           class="text-info"
           @click="auth('twitter')"
         />
-        <q-btn
+        <!-- <q-btn
           unelevated
           style="background: #1877f2; margin: 0.75rem auto; width: 70%;"
           icon-right="fab fa-facebook"
           label="Join with"
           class="text-info"
-        />
+        /> -->
         <q-btn
           unelevated
           style="background: #007bb5; margin: 0.75rem auto; width: 70%;"
@@ -35,6 +35,14 @@
           label="Join with"
           class="text-info"
           @click="auth('github')"
+        />
+        <q-btn
+          unelevated
+          style="background: #2fa3e6; margin: 0.75rem auto; width: 70%;"
+          icon-right="fab fa-telegram"
+          label="Join with"
+          class="text-info"
+          @click="auth('telegram')"
         />
       </div>
     </div>
@@ -52,11 +60,12 @@ export default {
 
   methods: {
     auth(network) {
+      if (network === 'telegram') { this.$router.push('/telegram'); }
       this.$hello.init({
         twitter: 'AeWaRlsX9Y0sGN6hzOPbnvD7i',
         github: '10dd01c1a10f078a45fa',
       }, {
-        oauth_proxy: 'http://localhost:5500/proxy',
+        oauth_proxy: 'http://127.0.0.1:5500/proxy',
       });
       this.$hello(network).login({ display: 'popup' }).then(() => {
         const authRes = this.$hello(network).getAuthResponse();
@@ -68,19 +77,27 @@ export default {
           const profile = json;
           console.log(profile);
           const userExists = Profile.find(network);
-          if (!userExists) {
-            Profile.insert({
-              data: {
-                name: profile.name,
-                username: profile.screen_name,
-                accessToken: authRes.oauth_token,
-                platform: network,
-              },
+          if (userExists) {
+            const user = {
+              name: profile.name,
+              username: profile.screen_name,
+              id: authRes.oauth_token,
+              platform: network,
+            };
+            // Profile.insert({
+            //   data: user,
+            // });
+            this.$axios({
+              method: 'get',
+              url: 'http://127.0.0.1:5500/create',
+              params: user,
+            }).then((res) => {
+              console.log(res);
             });
           }
 
 
-          // this.$router.push(`/${network}`);
+          this.$router.push(`/${network}`);
           /*
             performs operations using the user info from profile
           */
