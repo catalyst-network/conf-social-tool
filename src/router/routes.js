@@ -22,6 +22,13 @@ const routes = [
     ],
   },
   {
+    path: '/linkedin',
+    component: () => import('layouts/MyLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/Share/linkedin.vue') },
+    ],
+  },
+  {
     path: '/telegram',
     component: () => import('layouts/MyLayout.vue'),
     children: [

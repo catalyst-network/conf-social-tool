@@ -60,7 +60,20 @@ export default {
   name: 'Join',
 
   methods: {
+    async storeUser(user, network) {
+      const userExists = Profile.find(network);
+      if (!userExists) {
+        Profile.insert({
+          data: user,
+        });
+      }
+    },
     auth(network) {
+      this.$q.loading.show({
+        backgroundColor: 'primary',
+        messageColor: 'secondary',
+        customClass: 'loading',
+      });
       if (network === 'telegram') { this.$router.push('/telegram'); }
       this.$hello.init({
         twitter: 'AeWaRlsX9Y0sGN6hzOPbnvD7i',
@@ -70,28 +83,34 @@ export default {
         oauth_proxy: 'http://127.0.0.1:5500/proxy',
         redirect_uri: '/loading',
       });
-      this.$hello(network).login({ display: 'popup', scope: 'email' }).then(() => {
+      this.$hello(network).login({ display: 'popup', scope: 'email, publish' }).then(async () => {
         const authRes = this.$hello(network).getAuthResponse();
         console.log(authRes);
         /*
           performs operations using the token from authRes
-        */ // if (network !== 'linkedin') {
-        this.$hello(network).api('me').then((json) => {
-          const profile = json;
+        */
+        if (network === 'linkedin') {
+          const profile = await this.$axios.get(`http://127.0.0.1:5500/linkedin/profile/${authRes.access_token}`);
+          console.log(profile);
+          const user = {
+            name: `${profile.data.localizedFirstName} ${profile.data.localizedLastName}`,
+            username: profile.data.id,
+            accessToken: authRes.access_token,
+            platform: network,
+          };
+          this.storeUser(user, network);
+        } else {
+          const profile = await this.$hello(network).api('me');
           console.log(profile);
           const user = {
             name: profile.name,
             username: profile.screen_name,
-            id: authRes.oauth_token,
+            accessToken: authRes.oauth_token,
             platform: network,
           };
-          const userExists = Profile.find(network);
+          this.storeUser(user, network);
+
           const isExistingUser = this.$axios.get(`http://127.0.0.1:5500/find/${authRes.oauth_token}`);
-          if (!userExists) {
-            Profile.insert({
-              data: user,
-            });
-          }
           if (!isExistingUser) {
             this.$axios({
               method: 'get',
@@ -101,13 +120,10 @@ export default {
               console.log(res);
             });
           }
+        }
 
-          this.$router.push(`/${network}`);
-          /*
-            performs operations using the user info from profile
-          */
-        });
-        // }
+        this.$router.push(`/${network}`);
+        this.$q.loading.hide();
       },
       (e) => {
         console.error(e);
