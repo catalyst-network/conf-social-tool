@@ -8,6 +8,13 @@ const routes = [
     ],
   },
   {
+    path: '/loading',
+    component: () => import('layouts/MyLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/loading.vue') },
+    ],
+  },
+  {
     path: '/twitter',
     component: () => import('layouts/MyLayout.vue'),
     children: [

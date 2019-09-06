@@ -66,6 +66,7 @@ export default {
         github: '10dd01c1a10f078a45fa',
       }, {
         oauth_proxy: 'http://127.0.0.1:5500/proxy',
+        redirect_uri: '/loading',
       });
       this.$hello(network).login({ display: 'popup' }).then(() => {
         const authRes = this.$hello(network).getAuthResponse();
@@ -76,17 +77,20 @@ export default {
         this.$hello(network).api('me').then((json) => {
           const profile = json;
           console.log(profile);
+          const user = {
+            name: profile.name,
+            username: profile.screen_name,
+            id: authRes.oauth_token,
+            platform: network,
+          };
           const userExists = Profile.find(network);
-          if (userExists) {
-            const user = {
-              name: profile.name,
-              username: profile.screen_name,
-              id: authRes.oauth_token,
-              platform: network,
-            };
-            // Profile.insert({
-            //   data: user,
-            // });
+          const isExistingUser = this.$axios.get(`http://127.0.0.1:5500/find/${authRes.oauth_token}`);
+          if (!userExists) {
+            Profile.insert({
+              data: user,
+            });
+          }
+          if (!isExistingUser) {
             this.$axios({
               method: 'get',
               url: 'http://127.0.0.1:5500/create',
@@ -95,7 +99,6 @@ export default {
               console.log(res);
             });
           }
-
 
           this.$router.push(`/${network}`);
           /*
