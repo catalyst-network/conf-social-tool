@@ -27,6 +27,7 @@
           icon-right="fab fa-linkedin"
           label="Join with"
           class="text-info"
+          @click="auth('linkedin')"
         />
         <q-btn
           unelevated
@@ -64,36 +65,37 @@ export default {
       this.$hello.init({
         twitter: 'AeWaRlsX9Y0sGN6hzOPbnvD7i',
         github: '10dd01c1a10f078a45fa',
+        linkedin: '77tzd7knqhwntc',
       }, {
         oauth_proxy: 'http://127.0.0.1:5500/proxy',
       });
-      this.$hello(network).login({ display: 'popup' }).then(() => {
+      this.$hello(network).login({ display: 'popup', scope: 'email' }).then(() => {
         const authRes = this.$hello(network).getAuthResponse();
         console.log(authRes);
         /*
           performs operations using the token from authRes
-        */
+        */ // if (network !== 'linkedin') {
         this.$hello(network).api('me').then((json) => {
           const profile = json;
           console.log(profile);
           const userExists = Profile.find(network);
-          if (userExists) {
+          if (!userExists) {
             const user = {
               name: profile.name,
               username: profile.screen_name,
               id: authRes.oauth_token,
               platform: network,
             };
-            // Profile.insert({
-            //   data: user,
-            // });
-            this.$axios({
-              method: 'get',
-              url: 'http://127.0.0.1:5500/create',
-              params: user,
-            }).then((res) => {
-              console.log(res);
+            Profile.insert({
+              data: user,
             });
+            // this.$axios({
+            //   method: 'get',
+            //   url: 'http://127.0.0.1:5500/create',
+            //   params: user,
+            // }).then((res) => {
+            //   console.log(res);
+            // });
           }
 
 
@@ -102,6 +104,7 @@ export default {
             performs operations using the user info from profile
           */
         });
+        // }
       },
       (e) => {
         console.error(e);
