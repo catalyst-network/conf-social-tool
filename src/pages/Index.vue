@@ -74,7 +74,12 @@ export default {
         messageColor: 'secondary',
         customClass: 'loading',
       });
-      if (network === 'telegram') { this.$router.push('/telegram'); }
+
+      if (network === 'telegram') {
+        this.$router.push('/telegram');
+        this.$q.loading.hide();
+      }
+
       this.$hello.init({
         twitter: 'AeWaRlsX9Y0sGN6hzOPbnvD7i',
         github: '10dd01c1a10f078a45fa',
@@ -83,6 +88,7 @@ export default {
         oauth_proxy: 'http://127.0.0.1:5500/proxy',
         redirect_uri: '/loading',
       });
+
       this.$hello(network).login({ display: 'popup', scope: 'email, publish' }).then(async () => {
         const authRes = this.$hello(network).getAuthResponse();
         console.log(authRes);
@@ -127,6 +133,7 @@ export default {
       },
       (e) => {
         console.error(e);
+        this.$q.loading.hide();
       });
     },
   },

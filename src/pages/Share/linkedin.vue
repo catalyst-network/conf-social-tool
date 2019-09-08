@@ -16,18 +16,14 @@
             </h5>
           </div>
           <div class="row justify-center">
-            <!-- <twitter
-              v-if="!followed"
-            >
-              <a
-                href="https://twitter.com/twitter"
-                class="twitter-follow-button"
-                data-size="large"
-                data-show-count="false"
-              >
-                Follow @catalystNetOrg
-              </a>
-            </twitter> -->
+            <iframe
+              src="https://www.linkedin.com/pages-extensions/FollowCompany?id=18055982&counter=bottom"
+              height="43"
+              width="81"
+              frameborder="0"
+              allowfullscreen=""
+              title="Embedded post"
+            />
             <p
               v-if="followed"
               class="text-secondary default-font-bold"
