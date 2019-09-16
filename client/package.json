@@ -1,10 +1,9 @@
 {
   "name": "catlyst-faucet-client",
   "version": "0.0.1",
-  "description": "ProtoKats cryptocurrency faucet",
-  "productName": "Catalyst Crypto Faucet",
-  "cordovaId": "org.cordova.quasar.app",
-  "author": "stephenhorsfall <stephen.horsfall@atlascity.io>",
+  "description": "Catalyst Social App",
+  "productName": "Catalyst Social App",
+  "author": "Stephen Horsfall <stephen.horsfall@atlascity.io>",
   "private": true,
   "scripts": {
     "lint": "eslint --ext .js,.vue src",
