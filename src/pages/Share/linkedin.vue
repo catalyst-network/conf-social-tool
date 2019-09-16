@@ -18,8 +18,8 @@
           <div class="row justify-center">
             <iframe
               src="https://www.linkedin.com/pages-extensions/FollowCompany?id=18055982&counter=bottom"
-              height="43"
-              width="81"
+              height="45"
+              width="83"
               frameborder="0"
               allowfullscreen=""
               title="Embedded post"
