@@ -24,12 +24,12 @@
               allowfullscreen=""
               title="Embedded post"
             />
-            <p
+            <!-- <p
               v-if="followed"
               class="text-secondary default-font-bold"
             >
               Done <q-icon name="done" />
-            </p>
+            </p> -->
           </div>
         </div>
         <div class="col-auto">
@@ -71,7 +71,7 @@
         >
           <div class="row justify-center default-font-bold">
             <q-btn
-              :disable="!shared"
+              :disable="!followed"
               unelevated
               color="secondary"
               label="Claim Reward"
@@ -152,6 +152,7 @@ export default {
     if (!this.signedIn()) {
       this.$router.push('/');
     }
+    this.hasFollowed();
     this.$q.loading.hide();
   },
 
@@ -182,8 +183,18 @@ export default {
       console.log(session.expires, currentTime);
       return session && session.access_token && session.expires > currentTime;
     },
+    async hasFollowed() {
+      const monitor = setInterval(() => {
+        const elem = document.activeElement;
+        if (elem && elem.tagName === 'IFRAME') {
+          console.log('clicked');
+          this.followed = true;
+          clearInterval(monitor);
+        }
+      }, 100);
+    },
     async share() {
-      const result = await this.$axios.get(`http://127.0.0.1:5500/linkedin/share/${this.user.username}/${this.user.id}`);
+      const result = await this.$axios.get(`${process.env.SERVER_ENDPOINT}/linkedin/share/${this.user.username}/${this.user.id}`);
       if (result === 'success') {
         this.shared = true;
         this.shareLabel = 'Done';

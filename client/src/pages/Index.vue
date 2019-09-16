@@ -29,14 +29,14 @@
           class="text-info"
           @click="auth('linkedin')"
         />
-        <q-btn
+        <!-- <q-btn
           unelevated
           style="background: #211f1f; margin: 0.75rem auto; width: 70%;"
           icon-right="fab fa-github"
           label="Join with"
           class="text-info"
           @click="auth('github')"
-        />
+        /> -->
         <q-btn
           unelevated
           style="background: #2fa3e6; margin: 0.75rem auto; width: 70%;"
@@ -69,6 +69,7 @@ export default {
       }
     },
     auth(network) {
+      console.log(process.env);
       this.$q.loading.show({
         backgroundColor: 'primary',
         messageColor: 'secondary',
@@ -81,11 +82,11 @@ export default {
       }
 
       this.$hello.init({
-        twitter: 'AeWaRlsX9Y0sGN6hzOPbnvD7i',
-        github: '10dd01c1a10f078a45fa',
-        linkedin: '77tzd7knqhwntc',
+        twitter: process.env.TWITTER_CLIENT_ID,
+        // github: process.env.GITHUB_CLIENT_ID,,
+        linkedin: process.env.LINKEDIN_CLIENT_ID,
       }, {
-        oauth_proxy: 'http://127.0.0.1:5500/proxy',
+        oauth_proxy: `${process.env.SERVER_ENDPOINT}/proxy`,
         redirect_uri: '/loading',
       });
 
@@ -96,7 +97,7 @@ export default {
           performs operations using the token from authRes
         */
         if (network === 'linkedin') {
-          const profile = await this.$axios.get(`http://127.0.0.1:5500/linkedin/profile/${authRes.access_token}`);
+          const profile = await this.$axios.get(`${process.env.SERVER_ENDPOINT}/linkedin/profile/${authRes.access_token}`);
           console.log(profile);
           const user = {
             name: `${profile.data.localizedFirstName} ${profile.data.localizedLastName}`,
@@ -116,11 +117,11 @@ export default {
           };
           this.storeUser(user, network);
 
-          const isExistingUser = this.$axios.get(`http://127.0.0.1:5500/find/${authRes.oauth_token}`);
+          const isExistingUser = this.$axios.get(`${process.env.SERVER_ENDPOINT}/find/${authRes.oauth_token}`);
           if (!isExistingUser) {
             this.$axios({
               method: 'get',
-              url: 'http://127.0.0.1:5500/create',
+              url: `${process.env.SERVER_ENDPOINT}/create`,
               params: user,
             }).then((res) => {
               console.log(res);
