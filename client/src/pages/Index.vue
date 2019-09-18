@@ -98,7 +98,7 @@ export default {
         */
         if (network === 'linkedin') {
           const profile = await this.$axios.get(`${process.env.SERVER_ENDPOINT}/linkedin/profile/${authRes.access_token}`);
-          console.log(profile);
+          console.log('profile', profile);
           const user = {
             name: `${profile.data.localizedFirstName} ${profile.data.localizedLastName}`,
             username: profile.data.id,

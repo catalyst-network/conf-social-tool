@@ -17,9 +17,9 @@
           </div>
           <div class="row justify-center">
             <iframe
-              src="https://www.linkedin.com/pages-extensions/FollowCompany?id=18055982&counter=bottom"
-              height="45"
-              width="83"
+              src="https://www.linkedin.com/pages-extensions/FollowCompany?id=19141290&counter=bottom"
+              height="50"
+              width="150"
               frameborder="0"
               allowfullscreen=""
               title="Embedded post"
@@ -133,6 +133,7 @@ export default {
       rewardDialog: false,
       qrCodeDataURL: null,
       accessToken: null,
+      clickCounter: 0,
     };
   },
 
@@ -189,7 +190,11 @@ export default {
         if (elem && elem.tagName === 'IFRAME') {
           console.log('clicked');
           this.followed = true;
-          clearInterval(monitor);
+          this.clickCounter += 1;
+          if (this.clickCounter > 1) {
+            this.shared = true;
+            clearInterval(monitor);
+          }
         }
       }, 100);
     },
