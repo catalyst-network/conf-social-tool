@@ -4,7 +4,7 @@
 ```bash
 npm install
 ```
-### Add ENV variables
+### Add .env file
 See [.env.example](https://github.com/catalyst-network/conf-social-tool/blob/master/client/.env.example)
 
 ### Start the app in development mode (hot-code reloading, error reporting, etc.)
