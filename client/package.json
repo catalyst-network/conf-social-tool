@@ -15,7 +15,7 @@
     "@quasar/extras": "^1.0.0",
     "@vuex-orm/core": "^0.32.2",
     "axios": "^0.18.1",
-    "hellojs": "^1.18.1",
+    "hellojs": "git+https://github.com/stxphxn/hello.js.git",
     "qrcode": "^1.4.1",
     "quasar": "^1.0.0",
     "vue-i18n": "^8.0.0",

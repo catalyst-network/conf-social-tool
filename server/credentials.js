@@ -18,6 +18,6 @@ module.exports = [
     domain: process.env.LINKEDIN_CALLBACK,
     client_id: process.env.LINKEDIN_CLIENT_ID,
     client_secret: process.env.LINKEDIN_CLIENT_SECRET,
-    grant_url: 'https://www.linkedin.com/uas/oauth2/accessToken',
+    grant_url: 'https://www.linkedin.com/oauth/v2/accessToken',
   },
 ];
