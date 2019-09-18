@@ -69,7 +69,6 @@ export default {
       }
     },
     auth(network) {
-      console.log(process.env);
       this.$q.loading.show({
         backgroundColor: 'primary',
         messageColor: 'secondary',
@@ -79,6 +78,7 @@ export default {
       if (network === 'telegram') {
         this.$router.push('/telegram');
         this.$q.loading.hide();
+        return true;
       }
 
       this.$hello.init({
@@ -136,6 +136,7 @@ export default {
         console.error(e);
         this.$q.loading.hide();
       });
+      return true;
     },
   },
 };
