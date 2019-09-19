@@ -20,7 +20,7 @@
               v-if="!followed"
             >
               <a
-                href="https://twitter.com/twitter"
+                href="https://twitter.com/catalystNetOrg"
                 class="twitter-follow-button"
                 data-size="large"
                 data-show-count="false"
@@ -51,9 +51,8 @@
                   lang="en"
                   dir="ltr"
                 >
-                  appreciation Tweet 🙏
-                </p>&mdash; Twitter (@Twitter)
-                <a href="https://twitter.com/Twitter/status/1161997700985958403?ref_src=twsrc%5Etfw">August 15, 2019</a>
+                  Catalyst has developed a genuinely innovative consensus protocol — neither proof-of-work, nor proof-of-stake — that is fast, light, <a href="https://twitter.com/hashtag/secure?src=hash&amp;ref_src=twsrc%5Etfw">#secure</a> and <a href="https://twitter.com/hashtag/scalable?src=hash&amp;ref_src=twsrc%5Etfw">#scalable</a>. How can <a href="https://twitter.com/hashtag/dotnet?src=hash&amp;ref_src=twsrc%5Etfw">#dotnet</a> developers participate? Click here and find out more 👉 <a href="https://t.co/tKmPfXuKnu">https://t.co/tKmPfXuKnu</a> <a href="https://t.co/9FRpINRn19">pic.twitter.com/9FRpINRn19</a>
+                </p>&mdash; Catalyst Network (@catalystNetOrg) <a href="https://twitter.com/catalystNetOrg/status/1169547000439812096?ref_src=twsrc%5Etfw">September 5, 2019</a>
               </blockquote>
             </twitter>
           </div>
@@ -161,7 +160,7 @@ export default {
       customClass: 'loading',
     });
     if (this.signedIn()) {
-      console.log('Followed: ', await this.hasFollowed());
+      this.followed = await this.hasFollowed();
       console.log('Tweeted: ', await this.hasTweeted());
     } else {
       this.$router.push('/');
@@ -199,14 +198,19 @@ export default {
       return this.$hello('twitter').api('me/following', { limit: 25 }).then((response) => {
         const following = response.data.map(account => account.screen_name);
         console.log(following);
-        this.followed = true;
-        return following.includes('Twitter');
+        if (following.includes('catalystNetOrg')) {
+          this.followed = true;
+          return true;
+        }
+        this.followed = false;
+        return false;
       });
     },
     async hasTweeted() {
       return this.$hello('twitter').api('me/share', { limit: 25 }).then((response) => {
+        console.log(response.data);
         const tweets = response.data.map(tweet => tweet.text);
-        if (tweets.includes('RT @Twitter: appreciation Tweet 🙏')) {
+        if (tweets.includes('RT @catalystNetOrg: Catalyst has developed a genuinely innovative consensus protocol — neither proof-of-work, nor proof-of-stake — that is…')) {
           this.tweeted = true;
           this.tweetLabel = 'Done';
           return true;
@@ -225,7 +229,7 @@ export default {
       (...args) => console.log(args));
     },
     async claimReward() {
-      if (this.followed && this.tweeted) {
+      if (await this.hasFollowed() && this.tweeted) {
         const qrCodeData = {
           platform: 'twitter',
           username: this.user.username,
