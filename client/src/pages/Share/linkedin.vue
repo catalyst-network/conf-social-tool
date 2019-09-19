@@ -15,7 +15,7 @@
               Give us a follow
             </h5>
           </div>
-          <div class="row justify-center">
+          <div class="row justify-center linkedin-follow">
             <iframe
               src="https://www.linkedin.com/pages-extensions/FollowCompany?id=19141290&counter=bottom"
               height="50"
@@ -41,8 +41,8 @@
           <div class="row justify-center">
             <iframe
               src="https://www.linkedin.com/embed/feed/update/urn:li:share:6564520918251634688"
-              height="563"
-              width="504"
+              width="350"
+              height="500"
               frameborder="0"
               allowfullscreen=""
               title="Embedded post"
@@ -230,5 +230,7 @@ export default {
 .loading:before {
     opacity: 1;
 }
-
+.linkedin-follow {
+  margin-left: 50px;
+}
 </style>
