@@ -48,7 +48,7 @@
               title="Embedded post"
             />
           </div>
-          <div class="row justify-center default-font-bold">
+          <!-- <div class="row justify-center default-font-bold">
             <q-btn
               v-if="!shared"
               :disable="shared"
@@ -63,7 +63,7 @@
             >
               Done <q-icon name="done" />
             </p>
-          </div>
+          </div> -->
         </div>
         <div
           class="col-auto"
@@ -164,13 +164,10 @@ export default {
         height: 300,
       };
       if (typeof user === 'string') {
-        console.log(user);
         await QRCode.toDataURL(user, options, (err, url) => {
           if (err) {
             console.error(err);
           } else {
-            console.log('URL: ', url);
-            console.log(typeof url === 'string');
             this.qrCodeDataURL = url;
           }
         });
@@ -179,16 +176,13 @@ export default {
     signedIn() {
       const session = this.$hello('linkedin').getAuthResponse();
       this.accessToken = session.access_token;
-      console.log(session);
       const currentTime = (new Date()).getTime() / 1000;
-      console.log(session.expires, currentTime);
       return session && session.access_token && session.expires > currentTime;
     },
     async hasFollowed() {
       const monitor = setInterval(() => {
         const elem = document.activeElement;
         if (elem && elem.tagName === 'IFRAME') {
-          console.log('clicked');
           this.followed = true;
           this.clickCounter += 1;
           if (this.clickCounter > 1) {
@@ -215,7 +209,6 @@ export default {
         };
         const text = JSON.stringify(qrCodeData);
         await this.qrCode(text);
-        console.log(this.qrCodeDataURL);
         this.rewardDialog = true;
       }
     },

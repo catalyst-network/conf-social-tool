@@ -175,13 +175,10 @@ export default {
         height: 300,
       };
       if (typeof user === 'string') {
-        console.log(user);
         await QRCode.toDataURL(user, options, (err, url) => {
           if (err) {
             console.error(err);
           } else {
-            console.log('URL: ', url);
-            console.log(typeof url === 'string');
             this.qrCodeDataURL = url;
           }
         });
@@ -189,15 +186,12 @@ export default {
     },
     signedIn() {
       const session = this.$hello('twitter').getAuthResponse();
-      console.log(session);
       const currentTime = (new Date()).getTime() / 1000;
-      console.log(session.expires, currentTime);
       return session && session.access_token && session.expires > currentTime;
     },
     async hasFollowed() {
       return this.$hello('twitter').api('me/following', { limit: 25 }).then((response) => {
         const following = response.data.map(account => account.screen_name);
-        console.log(following);
         if (following.includes('catalystNetOrg')) {
           this.followed = true;
           return true;
@@ -208,7 +202,6 @@ export default {
     },
     async hasTweeted() {
       return this.$hello('twitter').api('me/share', { limit: 25 }).then((response) => {
-        console.log(response.data);
         const tweets = response.data.map(tweet => tweet.text);
         if (tweets.includes('RT @catalystNetOrg: Catalyst has developed a genuinely innovative consensus protocol — neither proof-of-work, nor proof-of-stake — that is…')) {
           this.tweeted = true;
@@ -221,10 +214,9 @@ export default {
     async tweet() {
       this.$hello('twitter').api('me/share', 'POST', {
         id: '1161997700985958403',
-      }).then((...args) => {
+      }).then(() => {
         this.tweeted = true;
         this.tweetLabel = 'Done';
-        console.log(args);
       },
       (...args) => console.log(args));
     },
