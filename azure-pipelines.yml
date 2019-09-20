@@ -1,0 +1,25 @@
+pool:
+  name: Hosted Ubuntu 1604
+steps:
+- task: DockerCompose@0
+  displayName: 'Run build'
+  inputs:
+    azureSubscription: 'Pay-As-You-Go (1232e929-30b6-4eda-b977-1116961439c8)'
+    azureContainerRegistry: '{"loginServer":"catalystnetwork.azurecr.io", "id" : "/subscriptions/1232e929-30b6-4eda-b977-1116961439c8/resourceGroups/catalystnet/providers/Microsoft.ContainerRegistry/registries/catalystnetwork"}'
+    dockerComposeCommand: 'up build'
+
+- task: Docker@0
+  displayName: 'Build api container'
+  inputs:
+    azureSubscription: 'Pay-As-You-Go (1232e929-30b6-4eda-b977-1116961439c8)'
+    azureContainerRegistry: '{"loginServer":"catalystnetwork.azurecr.io", "id" : "/subscriptions/1232e929-30b6-4eda-b977-1116961439c8/resourceGroups/catalystnet/providers/Microsoft.ContainerRegistry/registries/catalystnetwork"}'
+    buildArguments: '--target build'
+    additionalImageTags: latest
+
+- task: Docker@0
+  displayName: 'Push api container'
+  inputs:
+    azureSubscription: 'Pay-As-You-Go (1232e929-30b6-4eda-b977-1116961439c8)'
+    azureContainerRegistry: '{"loginServer":"catalystnetwork.azurecr.io", "id" : "/subscriptions/1232e929-30b6-4eda-b977-1116961439c8/resourceGroups/catalystnet/providers/Microsoft.ContainerRegistry/registries/catalystnetwork"}'
+    action: 'Push an image'
+    additionalImageTags: latest

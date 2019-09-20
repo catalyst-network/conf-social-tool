@@ -1,10 +1,17 @@
 version: "3"
 
-services:
-  web:
-    restart: always
-    build: .
-    env_file:
-      - .env
+services:  
+  build:
+    image: catalystnetwork.azurecr.io/catalyst.network/oauth-docker:build
+    command: ash -c "npm install"
+    volumes:
+       - .:/app
     ports:
-      - ${DOCKER_PORT}
+      - "4567:4567"
+
+  prod:
+    image: catalystsocial_buildprodcontainer:latest
+    volumes:
+      - .:/app
+    ports:
+      - "4567:4567"  
