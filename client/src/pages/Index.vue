@@ -87,7 +87,6 @@ export default {
         linkedin: process.env.LINKEDIN_CLIENT_ID,
       }, {
         oauth_proxy: `${process.env.SERVER_ENDPOINT}/proxy`,
-        redirect_uri: '/loading',
       });
 
       this.$hello(network).login({ display: 'popup', scope: 'email, publish' }).then(async () => {
